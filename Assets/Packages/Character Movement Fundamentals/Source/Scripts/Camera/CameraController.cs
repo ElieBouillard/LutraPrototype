@@ -35,6 +35,9 @@ namespace CMF
 		[Range(1f, 50f)]
 		public float cameraSmoothingFactor = 25f;
 
+		[SerializeField] private float _recoilX = -10f;
+		[SerializeField] private float _recoilY = -10f;
+
 		//Variables for storing current facing direction and upwards direction;
 		Vector3 facingDirection;
 		Vector3 upwardsDirection;
@@ -77,6 +80,12 @@ namespace CMF
 		{
 			HandleCameraRotation();
 		}
+
+		//AddRecoilOnCamera
+		public void ShootCameraRecoil()
+        {
+			RotateCamera(0, -5f);
+        }
 
 		//Get user input and handle camera rotation;
 		//This method can be overridden in classes derived from this base class to modify camera behaviour;

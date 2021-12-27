@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class MenuBehaviour : MonoBehaviour
 {
@@ -12,8 +13,11 @@ public class MenuBehaviour : MonoBehaviour
     [SerializeField] private Button _optionsButton = null;
     [SerializeField] private Button _quitButton = null;
     [Header("OptionsMenu")]
+    [SerializeField] private bool _inGameOptions = false;
+    [SerializeField] private Slider _mouseSensitivitySlider = null;
+    [SerializeField] private TMP_Text _mouseSensitivityText = null;
     [SerializeField] private Button _returnToMainMenuButton = null;
-
+    [SerializeField] private LoadParameters _loadParameters = null;
 
     [Header("MainMenuSettings")]
     [Space(10)]
@@ -22,7 +26,9 @@ public class MenuBehaviour : MonoBehaviour
 
     [Header("OptionsMenuSettings")]
     [Space(20)]
-    [SerializeField] private GameObject _optionsMenuObj = null; 
+    [SerializeField] private GameObject _optionsMenuObj = null;
+
+    private bool _inGameOptionsMenuIsOpen = false;
 
     private void OnEnable()
     {
@@ -35,12 +41,27 @@ public class MenuBehaviour : MonoBehaviour
 
         //OptionsMenu
         _returnToMainMenuButton.onClick.AddListener(ReturnToMainMenu);
+        _mouseSensitivitySlider.onValueChanged.AddListener(OnSensitivityChanged);
+    }
+
+    private void Update()
+    {
+        InGameOptionsUpdate();
     }
 
     private void InitializeStartMenu()
     {
-        _mainMenuObj.SetActive(true);
-        _optionsMenuObj.SetActive(false);
+        if (_inGameOptions)
+        {
+            _mainMenuObj.SetActive(false);
+            _optionsMenuObj.SetActive(false);
+        }
+        else
+        {
+            _mainMenuObj.SetActive(true);
+            _optionsMenuObj.SetActive(false);
+        }
+        OnSensitivityChanged(PlayerPrefs.GetFloat("MouseSensitivity"));
     }
 
     #region MainMenu
@@ -66,6 +87,32 @@ public class MenuBehaviour : MonoBehaviour
     {
         _mainMenuObj.SetActive(true);
         _optionsMenuObj.SetActive(false);
+    }
+
+    private void OnSensitivityChanged(float value)
+    {
+        _mouseSensitivityText.text = value.ToString("00.00");
+        PlayerPrefs.SetFloat("MouseSensitivity", value);
+
+        if (!_inGameOptions) { return; }
+        _loadParameters.LoadMouseSensitivity();
+    }
+
+    private void InGameOptionsUpdate()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SetOptionsMenu(!_inGameOptionsMenuIsOpen);
+            _inGameOptionsMenuIsOpen = !_inGameOptionsMenuIsOpen;
+        }
+    }
+
+    private void SetOptionsMenu(bool value)
+    {
+        _optionsMenuObj.SetActive(value);
+
+        if (value) { Cursor.lockState = CursorLockMode.None; }
+        else { Cursor.lockState = CursorLockMode.Locked; }
     }
     #endregion
 }

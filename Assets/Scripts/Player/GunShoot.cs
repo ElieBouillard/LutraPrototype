@@ -17,6 +17,8 @@ public class GunShoot : MonoBehaviour
     [SerializeField] private GameObject _bulletFx = null;
     [SerializeField] private GameObject _impactFx = null;
     [SerializeField] private GameObject _hitmarkerUi = null;
+    [SerializeField] private CMF.CameraController _cameraController = null;
+
     [Header("AudioSources")]
     [SerializeField] private AudioSource _glockSound = null;
     [SerializeField] private AudioSource _hitSound = null;
@@ -30,6 +32,16 @@ public class GunShoot : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             TryShoot();
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            _cameraController.SetFOV(45f);
+        }
+
+        if (Input.GetMouseButtonUp(1))
+        {
+            _cameraController.SetFOV(90f);
         }
     }
 
@@ -65,6 +77,8 @@ public class GunShoot : MonoBehaviour
             Invoke(nameof(ResetHitmarker), 0.1f);
             _hitSound.Play();
         }
+
+        _cameraController.ShootCameraRecoil();
     }
 
     private void ResetHitmarker()
