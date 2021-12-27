@@ -606,7 +606,9 @@ MonoBehaviour:
   lowerVerticalLimit: 60
   cameraSpeed: 250
   smoothCameraRotation: 1
-  cameraSmoothingFactor: 25
+  cameraSmoothingFactor: 50
+  _recoilX: -10
+  _recoilY: -10
 --- !u!114 &2071831681725671021
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -81,12 +81,6 @@ namespace CMF
 			HandleCameraRotation();
 		}
 
-		//AddRecoilOnCamera
-		public void ShootCameraRecoil()
-        {
-			RotateCamera(0, -5f);
-        }
-
 		//Get user input and handle camera rotation;
 		//This method can be overridden in classes derived from this base class to modify camera behaviour;
 		protected virtual void HandleCameraRotation()
@@ -99,6 +93,12 @@ namespace CMF
 			float _inputVertical = cameraInput.GetVerticalCameraInput();
 		
 			RotateCamera(_inputHorizontal, _inputVertical);
+		}
+
+		//AddRecoilOnCamera
+		public void ShootCameraRecoil()
+		{
+			currentXAngle -= 5f;
 		}
 
 		//Rotate camera; 

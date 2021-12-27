@@ -8,6 +8,8 @@ public class GunShoot : MonoBehaviour
     [Header("Parameters")]
     [SerializeField] private float _shootRange = 50f;
     [SerializeField] private LayerMask _shootableLayer = new LayerMask();
+    [SerializeField] private float _damageClassic = 25f;
+    [SerializeField] private float _damageHeadshot = 50f;
 
     [Space(20)]
     [Header("References")]
@@ -73,6 +75,14 @@ public class GunShoot : MonoBehaviour
         if(_hit.collider.gameObject.TryGetComponent<Target>(out Target target))
         {
             target.Damaged();
+            _hitmarkerUi.SetActive(true);
+            Invoke(nameof(ResetHitmarker), 0.1f);
+            _hitSound.Play();
+        }
+
+        if(_hit.collider.gameObject.TryGetComponent<EnemyHit>(out EnemyHit enemy))
+        {
+            enemy.GetHit(_damageClassic, _damageHeadshot);
             _hitmarkerUi.SetActive(true);
             Invoke(nameof(ResetHitmarker), 0.1f);
             _hitSound.Play();
